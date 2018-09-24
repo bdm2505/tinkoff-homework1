@@ -41,18 +41,19 @@ class Hangman(io: IODevice) {
         currentStage.head +
         s"Word: $secret\n" +
        "Guess a letter:"
-      val letter = io.readLine().charAt(0)
 
+      val letter = io.readLine().head
       var fail = true
-      val res = secret zip word map {
+
+      secret = secret zip word map {
         case (_, w) if w == letter =>
           fail = false
           w
         case (s, _) => s
-      }
+      } mkString
+
       if(fail)
         currentStage = currentStage.tail
-      secret = res.mkString("")
     }
     io printLine currentStage.head
     io printLine ( if(currentStage.tail == Nil)
