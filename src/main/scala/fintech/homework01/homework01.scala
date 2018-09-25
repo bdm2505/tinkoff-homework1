@@ -42,7 +42,7 @@ class Hangman(io: IODevice) {
         s"Word: $secret\n" +
        "Guess a letter:"
 
-      val letter = io.readLine().head
+      val letter = nextLetter()
       var fail = true
 
       secret = secret zip word map {
@@ -55,12 +55,20 @@ class Hangman(io: IODevice) {
       if(fail)
         currentStage = currentStage.tail
     }
-    io printLine currentStage.head
-    io printLine ( if(currentStage.tail == Nil)
-      "You are dead"
-    else
-      s"ok! $word")
+    io printLine currentStage.head +
+      (if(currentStage.tail == Nil)
+        "You are dead"
+      else
+        s"ok! $word")
 
+  }
+
+  def nextLetter():Char = {
+    val str = io readLine()
+    if (str.length == 1)
+      return str.head
+    io printLine "Incorrect input, try again:"
+    nextLetter()
   }
 
   val stages = List(
